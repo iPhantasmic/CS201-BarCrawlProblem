@@ -1,6 +1,6 @@
 package com.cs201.barcrawl;
 
-import com.cs201.barcrawl.models.Business;
+import com.cs201.barcrawl.models.BusinessJsonObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
@@ -8,33 +8,34 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.*;
 
-//@SpringBootApplication
+@SpringBootApplication
 public class CS201Application {
 
     public static void main(String[] args) {
+        prepareBusinessJson();
+        SpringApplication.run(CS201Application.class, args);
 
-//        SpringApplication.run(CS201Application.class, args);
+    }
 
-        BufferedReader br = null;
+    public static void prepareBusinessJson() {
+        BufferedReader br;
         int count = 0;
         try {
             String sCurrentLine;
-            br = new BufferedReader(new FileReader("/Users/Alpha/Documents/GitHub/CS201/src/main/resources/original_business.json"));
+            br = new BufferedReader(new FileReader("src/main/resources/original_business.json"));
 
             ObjectMapper objectMapper = new ObjectMapper();
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("target/result.json", true)));
 
             while ((sCurrentLine = br.readLine()) != null) {
                 objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                Business business = objectMapper.readValue(sCurrentLine, Business.class);
+                BusinessJsonObject businessJsonObject = objectMapper.readValue(sCurrentLine, BusinessJsonObject.class);
 
-                if(business.getCategories() == null) {
+                if(businessJsonObject.getCategories() == null) {
                     continue;
                 }
 
-                if (business.getCategories().contains("Bar")) {
-//                    objectMapper.writeValue(new File("target/result.json"), business);
-//                    objectMapper.writeValue(out, business);
+                if (businessJsonObject.getCategories().contains("Bar")) {
                     out.write(sCurrentLine);
                     out.write("\n");
                     count += 1;
@@ -45,5 +46,4 @@ public class CS201Application {
         }
         System.out.println(count);
     }
-
 }

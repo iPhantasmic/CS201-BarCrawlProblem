@@ -1,16 +1,11 @@
 package com.cs201.barcrawl.models;
 
-import com.cs201.barcrawl.util.JsonNodeConverter;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
-@Entity
-public class Business {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+// Used for initial parsing of .json file
+public class BusinessJsonObject {
 
     private String business_id;
     private String name;
@@ -18,35 +13,16 @@ public class Business {
     private String city;
     private String state;
     private String postal_code;
-
     @Column(precision = 10, scale = 8)
     private double latitude;
     @Column(precision = 11, scale = 7)
     private double longitude;
-
     private double stars;
     private int review_count;
     private int is_open;
-
-    @Convert(converter = JsonNodeConverter.class)
-    @Column(columnDefinition = "LONGTEXT")
     private JsonNode attributes;
-
-    @Column(columnDefinition = "LONGTEXT")
     private String categories;
-
-    @Convert(converter = JsonNodeConverter.class)
-    @Column(columnDefinition = "LONGTEXT")
     private JsonNode hours;
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 
     public String getBusiness_id() {
         return business_id;
