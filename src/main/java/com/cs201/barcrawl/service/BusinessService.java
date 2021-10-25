@@ -1,7 +1,6 @@
 package com.cs201.barcrawl.service;
 
 import com.cs201.barcrawl.models.Business;
-import com.cs201.barcrawl.models.BusinessJsonObject;
 import com.cs201.barcrawl.repository.BusinessRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Optional;
 
 
 @Service
@@ -43,5 +43,10 @@ public class BusinessService {
         }
 
         return true;
+    }
+
+    public Business getBusiness(long id){
+        return businessRepository.findById(id)
+                                    .orElseThrow(()-> new IllegalArgumentException("Business does not exist"));
     }
 }

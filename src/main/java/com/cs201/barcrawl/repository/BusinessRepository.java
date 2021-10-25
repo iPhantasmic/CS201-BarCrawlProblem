@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface BusinessRepository extends CrudRepository<Business, Integer> {
+public interface BusinessRepository extends CrudRepository<Business, Long> {
     // Nothing to see here~
 }
