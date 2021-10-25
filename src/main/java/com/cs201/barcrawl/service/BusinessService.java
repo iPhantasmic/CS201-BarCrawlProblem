@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.Optional;
 
 
 @Service
@@ -17,14 +16,7 @@ public class BusinessService {
     @Autowired
     private BusinessRepository businessRepository;
 
-    // TODO: sorting algorithms here
-    // start measuring time taken only after receiving the object from businessRepository query
-
-    // can use this below to ensure that the data returned from repository is always the same
-    // List<Business> results = businessRepository.findaAll(Sort.by(Sort.Direction.ASC, "name"))
-
     public boolean loadData() {
-        // TODO: load data from results.json into the DB
         BufferedReader br;
         try {
             String sCurrentLine;
@@ -49,4 +41,11 @@ public class BusinessService {
         return businessRepository.findById(id)
                                     .orElseThrow(()-> new IllegalArgumentException("Business does not exist"));
     }
+
+    // TODO: sorting algorithms here
+    // start measuring time taken only after receiving the object from businessRepository query
+
+    // can use this below to ensure that the data returned from repository is always the same
+    // List<Business> results = businessRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+
 }
