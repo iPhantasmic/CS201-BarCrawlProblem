@@ -27,6 +27,7 @@ public class Business {
     private double stars;
     private int review_count;
     private int is_open;
+    private double price;
 
     @Convert(converter = JsonNodeConverter.class)
     @Column(columnDefinition = "LONGTEXT")
@@ -159,4 +160,9 @@ public class Business {
     public void setHours(JsonNode hours) {
         this.hours = hours;
     }
+
+    public double getPrice() { return  price; }
+
+    public void setPrice(double price) { this.price = price; }
+
 }
