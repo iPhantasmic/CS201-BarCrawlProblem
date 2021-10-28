@@ -159,4 +159,12 @@ public class Business {
     public void setHours(JsonNode hours) {
         this.hours = hours;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id = " + id);
+        sb.append(",Name = " + name);
+        sb.append(",Address = " + address);
+        return sb.toString();
+    }
 }
