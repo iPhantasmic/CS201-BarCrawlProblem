@@ -2,6 +2,7 @@ package com.cs201.barcrawl.controller;
 
 import com.cs201.barcrawl.models.Business;
 import com.cs201.barcrawl.service.BusinessService;
+import com.cs201.barcrawl.service.SortingService;
 import com.cs201.barcrawl.util.DistanceUtil;
 import com.cs201.barcrawl.util.GoogleMapsUtil;
 import com.cs201.barcrawl.util.routing.RouteBuilder;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,9 @@ public class BusinessController {
 
     @Autowired
     RouteBuilder routeBuilder;
+
+    @Autowired
+    SortingService sortingService;
 
     @GetMapping(value = "/test")
     public @ResponseBody ResponseEntity<?> TestApi() {
@@ -60,30 +65,34 @@ public class BusinessController {
     }
 
     @GetMapping(value = "/filter-sort")
-    public List<Business> filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
+    public Business[] filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
         // Consider changing to set
         List<Business> destinations = businessService.findAll();
 
-        for (Business destination : destinations) {
+        for (Iterator<Business> iterator = destinations.iterator(); iterator.hasNext();) {
+            Business next = iterator.next();
+
             int distance =  distanceUtil.distanceInMeters(
                     originLat,
                     originLong,
-                    destination.getLatitude(),
-                    destination.getLongitude()
+                    next.getLatitude(),
+                    next.getLongitude()
             );
 
             // if the distance exceeds the required distance, we do not want to consider this destination
             if (distance > maxDist) {
-                destinations.remove(destination);
+                iterator.remove();
                 continue;
             }
 
             // otherwise we set the distance for comparison later
-            destination.setDistance(distance);
+            next.setDistance(distance);
         }
 
-        return destinations;
+        Business[] result = sortingService.mergeSort(destinations);
+
+        return result;
     }
 
     @GetMapping(value = "/routeTest")
