@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javax.persistence.*;
 
 @Entity
-public class Business {
+public class Business implements Comparable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,7 @@ public class Business {
     private int review_count;
     private int is_open;
     private double price;
+    private int distance;
 
     @Convert(converter = JsonNodeConverter.class)
     @Column(columnDefinition = "LONGTEXT")
@@ -165,4 +166,40 @@ public class Business {
 
     public void setPrice(double price) { this.price = price; }
 
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getDistance() {
+        return this.distance;
+    }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id = " + id);
+        sb.append(",Name = " + name);
+        sb.append(",Address = " + address);
+        return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Business b = (Business) o;
+        int result = Integer.compare(this.distance, b.getDistance());
+
+        if (result != 0)
+            return result;
+
+        result = Double.compare(this.stars, b.getStars());
+
+        if (result != 0)
+            return result;
+
+        result = Integer.compare(this.review_count, b.getReview_count());
+
+        if (result != 0)
+            return result;
+
+        return 0;
+    }
 }
