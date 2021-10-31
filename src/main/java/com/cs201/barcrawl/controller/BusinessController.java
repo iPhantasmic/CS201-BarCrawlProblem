@@ -62,6 +62,7 @@ public class BusinessController {
     @GetMapping(value = "/filter-sort")
     public List<Business> filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
+        // Consider changing to set
         List<Business> destinations = businessService.findAll();
 
         for (Business destination : destinations) {
