@@ -10,8 +10,10 @@ public class BudgetService {
     public ArrayList<Business> getRestaurantsUnderBudget(ArrayList<Business> businessAL, double budget) {
         ArrayList<ArrayList<ArrayList<Business>>> table = new ArrayList<>();
 
+        long budgetLong = (long) (budget * 100);
+
         for(int i = 0; i <= businessAL.size(); i++) {
-            for(int j = 0; j <= budget; j++) {
+            for(int j = 0; j <= budgetLong; j++) {
                 if (i == 0 || j == 0) {
                     ArrayList<Business> dummyBusinessAL = new ArrayList<Business>();
                     Business dummyBusiness = new Business();
@@ -22,7 +24,7 @@ public class BudgetService {
                     dummyVal.add(dummyBusinessAL);
                     table.add(dummyVal);
                 }
-                else if (businessAL.get(i - 1).getPrice() <= budget) {
+                else if (businessAL.get(i - 1).getPrice() <= budgetLong) {
                     double prevStarVal = getTotalStarsCurrentBasket(table.get(i-1).get(j));
                     double addNewBusiness = businessAL.get(i-1).getStars()
                             + getTotalStarsCurrentBasket(table.get(i-1)
@@ -48,7 +50,7 @@ public class BudgetService {
             }
         }
 
-        return table.get(businessAL.size()).get((int) budget);
+        return table.get(businessAL.size()).get((int) budgetLong);
     }
 
     private double getTotalPriceCurrentBasket(ArrayList<Business> businessesAL) {
