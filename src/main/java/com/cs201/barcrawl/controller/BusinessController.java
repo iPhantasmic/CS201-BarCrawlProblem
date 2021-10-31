@@ -66,14 +66,21 @@ public class BusinessController {
         List<Business> destinations = businessService.findAll();
 
         for (Business destination : destinations) {
-            destination.setDistance(
-                    distanceUtil.distanceInMeters(
-                            originLat,
-                            originLong,
-                            destination.getLatitude(),
-                            destination.getLongitude()
-                    )
+            int distance =  distanceUtil.distanceInMeters(
+                    originLat,
+                    originLong,
+                    destination.getLatitude(),
+                    destination.getLongitude()
             );
+
+            // if the distance exceeds the required distance, we do not want to consider this destination
+            if (distance > maxDist) {
+                destinations.remove(destination);
+                continue;
+            }
+
+            // otherwise we set the distance for comparison later
+            destination.setDistance(distance);
         }
 
         return destinations;
