@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javax.persistence.*;
 
 @Entity
-public class Business {
+public class Business implements Comparable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -166,5 +166,21 @@ public class Business {
         sb.append(",Name = " + name);
         sb.append(",Address = " + address);
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Business b = (Business) o;
+        int result = Double.compare(this.stars, b.getStars());
+
+        if (result != 0)
+            return result;
+
+        result = Integer.compare(this.review_count, b.getReview_count());
+
+        if (result != 0)
+            return result;
+
+        return 0;
     }
 }
