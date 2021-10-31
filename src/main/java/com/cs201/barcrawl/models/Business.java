@@ -27,6 +27,7 @@ public class Business implements Comparable {
     private double stars;
     private int review_count;
     private int is_open;
+    private int distance;
 
     @Convert(converter = JsonNodeConverter.class)
     @Column(columnDefinition = "LONGTEXT")
@@ -158,6 +159,14 @@ public class Business implements Comparable {
 
     public void setHours(JsonNode hours) {
         this.hours = hours;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getDistance() {
+        return this.distance;
     }
 
     public String toString(){
