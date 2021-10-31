@@ -59,6 +59,25 @@ public class BusinessController {
         return distanceUtil.distanceList(originLat, originLong, destinations, maxDist);
     }
 
+    @GetMapping(value = "/filter-sort")
+    public List<Business> filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                                 @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = businessService.findAll();
+
+        for (Business destination : destinations) {
+            destination.setDistance(
+                    distanceUtil.distanceInMeters(
+                            originLat,
+                            originLong,
+                            destination.getLatitude(),
+                            destination.getLongitude()
+                    )
+            );
+        }
+
+        return destinations;
+    }
+
     @GetMapping(value = "/routeTest")
     public List<Business> routing(){
         List<Business> destinations = new ArrayList<>();
