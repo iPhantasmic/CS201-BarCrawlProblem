@@ -180,7 +180,12 @@ public class Business implements Comparable {
     @Override
     public int compareTo(Object o) {
         Business b = (Business) o;
-        int result = Double.compare(this.stars, b.getStars());
+        int result = Integer.compare(this.distance, b.getDistance());
+
+        if (result != 0)
+            return result;
+
+        result = Double.compare(this.stars, b.getStars());
 
         if (result != 0)
             return result;
