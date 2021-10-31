@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 // Implementing merge sort for a generic type
 // Taken from: https://big-o.io/examples/merge-sort/java-generic/
 @Component
-public class MergeSort<T extends Comparable<? super T>> {
+public class MergeSortUtil<T extends Comparable<? super T>> {
 
     // mergeSort takes in an array of object of type T and the start and the end
-    void mergeSort(T[] array, int start, int end) {
+    public void mergeSort(T[] array, int start, int end) {
         if (start < end)
         {
             // find the middle index
