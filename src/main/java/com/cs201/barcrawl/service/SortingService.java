@@ -14,13 +14,13 @@ public class SortingService {
     private MergeSortUtil mergeSortUtil;
 
     public Business[] wrap(List<Business> businesses) {
-        return (Business[]) businesses.toArray();
+        return businesses.toArray(Business[]::new);
     }
 
     public Business[] mergeSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
-        mergeSortUtil.mergeSort(businessArray, 0, businessArray.length);
+        mergeSortUtil.mergeSort(businessArray, 0, businessArray.length - 1);
 
         return businessArray;
     }
