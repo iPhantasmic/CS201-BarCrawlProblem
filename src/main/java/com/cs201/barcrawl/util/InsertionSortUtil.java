@@ -16,7 +16,7 @@ public class InsertionSortUtil<T extends Comparable<? super T>> {
 //        System.out.println(java.util.Arrays.toString(arrayOfDoubles));
 //    }
 
-    void insertionSort(T[] array)
+    public void insertionSort(T[] array)
     {
         // start at the first index and iterate through to the end
         for (int i = 1; i < array.length; i++)
