@@ -16,7 +16,7 @@ public class HeapSortUtil<T extends Comparable<? super T>> {
 //        System.out.println(java.util.Arrays.toString(arrayOfDoubles));
 //    }
 
-    void heapSort(T[] array)
+    public void heapSort(T[] array)
     {
         int size = array.length;
 
