@@ -68,28 +68,7 @@ public class BusinessController {
     @GetMapping(value = "/filter-sort/merge-sort")
     public SortedDTO filterAndMergeSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
-        // Consider changing to set
-        List<Business> destinations = businessService.findAll();
-
-        for (Iterator<Business> iterator = destinations.iterator(); iterator.hasNext();) {
-            Business next = iterator.next();
-
-            int distance =  distanceUtil.distanceInMeters(
-                    originLat,
-                    originLong,
-                    next.getLatitude(),
-                    next.getLongitude()
-            );
-
-            // if the distance exceeds the required distance, we do not want to consider this destination
-            if (distance > maxDist) {
-                iterator.remove();
-                continue;
-            }
-
-            // otherwise we set the distance for comparison later
-            next.setDistance(distance);
-        }
+        List<Business> destinations = filter(originLat, originLong, maxDist);
 
         SortedDTO result = sortingService.mergeSort(destinations);
 
