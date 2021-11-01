@@ -1,6 +1,7 @@
 package com.cs201.barcrawl.controller;
 
 import com.cs201.barcrawl.models.Business;
+import com.cs201.barcrawl.models.SortedDTO;
 import com.cs201.barcrawl.service.BusinessService;
 import com.cs201.barcrawl.service.SortingService;
 import com.cs201.barcrawl.util.DistanceUtil;
@@ -65,7 +66,7 @@ public class BusinessController {
     }
 
     @GetMapping(value = "/filter-sort")
-    public Business[] filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
+    public SortedDTO filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
         // Consider changing to set
         List<Business> destinations = businessService.findAll();
@@ -90,7 +91,7 @@ public class BusinessController {
             next.setDistance(distance);
         }
 
-        Business[] result = sortingService.mergeSort(destinations);
+        SortedDTO result = sortingService.mergeSort(destinations);
 
         return result;
     }
