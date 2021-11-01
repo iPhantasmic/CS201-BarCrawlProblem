@@ -75,6 +75,7 @@ public class BusinessController {
         return result;
     }
 
+    @GetMapping(value = "/filter-sort/insertion-sort")
     public SortedDTO filterAndInsertionSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                         @RequestParam Integer maxDist) { // maxDist is in metres
         List<Business> destinations = filter(originLat, originLong, maxDist);
