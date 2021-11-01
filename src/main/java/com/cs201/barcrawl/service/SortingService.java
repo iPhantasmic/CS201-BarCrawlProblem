@@ -1,6 +1,7 @@
 package com.cs201.barcrawl.service;
 
 import com.cs201.barcrawl.models.Business;
+import com.cs201.barcrawl.models.SortedDTO;
 import com.cs201.barcrawl.util.HeapSortUtil;
 import com.cs201.barcrawl.util.InsertionSortUtil;
 import com.cs201.barcrawl.util.MergeSortUtil;
@@ -29,12 +30,18 @@ public class SortingService {
         return businesses.toArray(Business[]::new);
     }
 
-    public Business[] mergeSort(List<Business> businesses) {
+    public SortedDTO mergeSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
+        long before = System.currentTimeMillis();
         mergeSortUtil.mergeSort(businessArray, 0, businessArray.length - 1);
+        long after = System.currentTimeMillis();
 
-        return businessArray;
+        SortedDTO sortedDTO = new SortedDTO();
+        sortedDTO.setTime(after - before);
+        sortedDTO.setDestinations(businessArray);
+
+        return sortedDTO;
     }
 
     public Business[] quickSort(List<Business> businesses) {
