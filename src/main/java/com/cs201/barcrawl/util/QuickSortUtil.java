@@ -1,6 +1,9 @@
 package com.cs201.barcrawl.util;
 
+import org.springframework.stereotype.Component;
+
 // Taken from: https://big-o.io/examples/quicksort/java-generic/
+@Component
 public class QuickSortUtil<T extends Comparable<? super T>> {
     void quicksort(T[] array, int startIndex, int endIndex)
     {
