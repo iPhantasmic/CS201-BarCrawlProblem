@@ -1,6 +1,6 @@
 package com.cs201.barcrawl.util;
 
-public class HeapSort<T extends Comparable<? super T>> {
+public class HeapSortUtil<T extends Comparable<? super T>> {
 //    public static void main(String[] args)
 //    {
 //        // example using Strings
