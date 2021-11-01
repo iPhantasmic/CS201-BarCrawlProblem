@@ -53,5 +53,11 @@ public class SortingService {
         return businessArray;
     }
 
+    public Business[] heapSort(List<Business> businesses) {
+        Business[] businessArray = wrap(businesses);
 
+        heapSortUtil.heapSort(businessArray);
+
+        return businessArray;
+    }
 }
