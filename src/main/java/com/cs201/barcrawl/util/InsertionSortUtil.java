@@ -1,6 +1,6 @@
 package com.cs201.barcrawl.util;
 
-public class InsertionSort<T extends Comparable<? super T>> {
+public class InsertionSortUtil<T extends Comparable<? super T>> {
 //    public static void main(String[] args)
 //    {
 //        // example using Strings
