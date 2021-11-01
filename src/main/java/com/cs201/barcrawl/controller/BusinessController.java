@@ -96,6 +96,42 @@ public class BusinessController {
         return result;
     }
 
+    public SortedDTO filterAndInsertionSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                        @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.insertionSort(destinations);
+
+        return result;
+    }
+
+    public List<Business> filter(Double originLat, Double originLong, Integer maxDist) {
+        // Consider changing to set
+        List<Business> destinations = businessService.findAll();
+
+        for (Iterator<Business> iterator = destinations.iterator(); iterator.hasNext();) {
+            Business next = iterator.next();
+
+            int distance =  distanceUtil.distanceInMeters(
+                    originLat,
+                    originLong,
+                    next.getLatitude(),
+                    next.getLongitude()
+            );
+
+            // if the distance exceeds the required distance, we do not want to consider this destination
+            if (distance > maxDist) {
+                iterator.remove();
+                continue;
+            }
+
+            // otherwise we set the distance for comparison later
+            next.setDistance(distance);
+        }
+
+        return destinations;
+    }
+
     @GetMapping(value = "/routeTest")
     public List<Business> routing(){
         List<Business> destinations = new ArrayList<>();
