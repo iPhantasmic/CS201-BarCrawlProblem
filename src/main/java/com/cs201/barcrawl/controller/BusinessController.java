@@ -85,6 +85,26 @@ public class BusinessController {
         return result;
     }
 
+    @GetMapping(value = "/filter-sort/quick-sort")
+    public SortedDTO filterAndQuickSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                            @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.quickSort(destinations);
+
+        return result;
+    }
+
+    @GetMapping(value = "/filter-sort/heap-sort")
+    public SortedDTO filterAndHeapSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                        @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.heapSort(destinations);
+
+        return result;
+    }
+
     public List<Business> filter(Double originLat, Double originLong, Integer maxDist) {
         // Consider changing to set
         List<Business> destinations = businessService.findAll();
