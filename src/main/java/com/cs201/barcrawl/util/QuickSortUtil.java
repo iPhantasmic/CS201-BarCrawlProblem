@@ -1,7 +1,7 @@
 package com.cs201.barcrawl.util;
 
 // Taken from: https://big-o.io/examples/quicksort/java-generic/
-public class QuickSort<T extends Comparable<? super T>> {
+public class QuickSortUtil<T extends Comparable<? super T>> {
     void quicksort(T[] array, int startIndex, int endIndex)
     {
         // verify that the start and end index have not overlapped
