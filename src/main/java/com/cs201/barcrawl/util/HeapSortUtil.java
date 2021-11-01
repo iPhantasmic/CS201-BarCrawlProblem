@@ -1,5 +1,8 @@
 package com.cs201.barcrawl.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class HeapSortUtil<T extends Comparable<? super T>> {
 //    public static void main(String[] args)
 //    {
