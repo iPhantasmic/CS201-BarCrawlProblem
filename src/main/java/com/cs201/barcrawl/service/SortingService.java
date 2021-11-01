@@ -45,5 +45,13 @@ public class SortingService {
         return businessArray;
     }
 
+    public Business[] insertionSort(List<Business> businesses) {
+        Business[] businessArray = wrap(businesses);
+
+        insertionSortUtil.insertionSort(businessArray);
+
+        return businessArray;
+    }
+
 
 }
