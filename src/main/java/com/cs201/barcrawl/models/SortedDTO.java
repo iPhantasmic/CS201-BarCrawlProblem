@@ -1,15 +1,15 @@
 package com.cs201.barcrawl.models;
 
 public class SortedDTO {
-    private int time;
+    private long time;
 
     private Business[] destinations;
 
-    public int getTime() {
+    public  long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
