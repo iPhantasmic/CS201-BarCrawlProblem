@@ -1,6 +1,8 @@
 package com.cs201.barcrawl.service;
 
 import com.cs201.barcrawl.models.Business;
+import com.cs201.barcrawl.util.HeapSortUtil;
+import com.cs201.barcrawl.util.InsertionSortUtil;
 import com.cs201.barcrawl.util.MergeSortUtil;
 import com.cs201.barcrawl.util.QuickSortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,12 @@ public class SortingService {
 
     @Autowired
     private QuickSortUtil quickSortUtil;
+
+    @Autowired
+    private InsertionSortUtil insertionSortUtil;
+
+    @Autowired
+    private HeapSortUtil heapSortUtil;
 
     public Business[] wrap(List<Business> businesses) {
         return businesses.toArray(Business[]::new);
