@@ -52,7 +52,7 @@ public class InsertionSortUtil<T extends Comparable<? super T>> {
 
     private long getCurrentlyAllocatedMemory() {
         final Runtime runtime = Runtime.getRuntime();
-        return (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+        return (runtime.totalMemory() - runtime.freeMemory());
     }
 
     private long getReallyUsedMemory() {

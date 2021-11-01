@@ -2,25 +2,17 @@ package com.cs201.barcrawl.util;
 
 import org.springframework.stereotype.Component;
 
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+
 @Component
 public class HeapSortUtil<T extends Comparable<? super T>> {
-//    public static void main(String[] args)
-//    {
-//        // example using Strings
-//        String[] arrayOfStrings = {"Andree", "Leana", "Faviola", "Loyce", "Quincy", "Milo", "Jamila", "Toccara", "Nelda", "Blair", "Ernestine", "Chara", "Kareen", "Monty", "Rene", "Cami", "Winifred", "Tara", "Demetrice", "Azucena"};
-//        HeapSort<String> stringSorter   = new HeapSort<>();
-//        stringSorter.heapSort(arrayOfStrings);
-//        System.out.println(java.util.Arrays.toString(arrayOfStrings));
-//
-//        // example using Doubles
-//        Double[] arrayOfDoubles = {0.35, 0.02, 0.36, 0.82, 0.27, 0.49, 0.41, 0.17, 0.30, 0.89, 0.37, 0.66, 0.82, 0.17, 0.20, 0.96, 0.18, 0.25, 0.37, 0.52};
-//        HeapSort<Double> doubleSorter   = new HeapSort<>();
-//        doubleSorter.heapSort(arrayOfDoubles);
-//        System.out.println(java.util.Arrays.toString(arrayOfDoubles));
-//    }
 
-    public void heapSort(T[] array)
-    {
+    public long[] heapSort(T[] array) {
+        long usedMemoryBefore = getReallyUsedMemory();
+        long before = System.currentTimeMillis();
+        System.out.println(usedMemoryBefore);
+
         int size = array.length;
 
         // build heapSort (rearrange array)
@@ -38,11 +30,18 @@ public class HeapSortUtil<T extends Comparable<? super T>> {
             // call max heapify on the reduced heapSort
             heapify(array, i, 0);
         }
+
+        long after = System.currentTimeMillis();
+        long usedMemoryAfter = getReallyUsedMemory();
+        System.out.println(usedMemoryAfter);
+        long[] results = new long[2];
+        results[0] = after - before;
+        results[1] = usedMemoryAfter - usedMemoryBefore;
+        return results;
     }
 
     // to heapify a subtree rooted with node i which is an index in array[]
-    void heapify(T[] array, int size, int i)
-    {
+    void heapify(T[] array, int size, int i) {
         int max   = i; // initialize max as root
         int left  = 2 * i + 1;
         int right = 2 * i + 2;
@@ -67,4 +66,27 @@ public class HeapSortUtil<T extends Comparable<? super T>> {
             heapify(array, size, max);
         }
     }
+
+
+    private long getGcCount() {
+        long sum = 0;
+        for (GarbageCollectorMXBean b : ManagementFactory.getGarbageCollectorMXBeans()) {
+            long count = b.getCollectionCount();
+            if (count != -1) { sum += count; }
+        }
+        return sum;
+    }
+
+    private long getCurrentlyAllocatedMemory() {
+        final Runtime runtime = Runtime.getRuntime();
+        return (runtime.totalMemory() - runtime.freeMemory());
+    }
+
+    private long getReallyUsedMemory() {
+        long before = getGcCount();
+        System.gc();
+        while (getGcCount() == before);
+        return getCurrentlyAllocatedMemory();
+    }
+
 }
