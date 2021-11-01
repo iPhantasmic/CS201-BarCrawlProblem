@@ -44,27 +44,45 @@ public class SortingService {
         return sortedDTO;
     }
 
-    public Business[] quickSort(List<Business> businesses) {
+    public SortedDTO quickSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
+        long before = System.currentTimeMillis();
         quickSortUtil.quicksort(businessArray, 0, businessArray.length - 1);
+        long after = System.currentTimeMillis();
 
-        return businessArray;
+        SortedDTO sortedDTO = new SortedDTO();
+        sortedDTO.setTime(after - before);
+        sortedDTO.setDestinations(businessArray);
+
+        return sortedDTO;
     }
 
-    public Business[] insertionSort(List<Business> businesses) {
+    public SortedDTO insertionSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
+        long before = System.currentTimeMillis();
         insertionSortUtil.insertionSort(businessArray);
+        long after = System.currentTimeMillis();
 
-        return businessArray;
+        SortedDTO sortedDTO = new SortedDTO();
+        sortedDTO.setTime(after - before);
+        sortedDTO.setDestinations(businessArray);
+
+        return sortedDTO;
     }
 
-    public Business[] heapSort(List<Business> businesses) {
+    public SortedDTO heapSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
+        long before = System.currentTimeMillis();
         heapSortUtil.heapSort(businessArray);
+        long after = System.currentTimeMillis();
 
-        return businessArray;
+        SortedDTO sortedDTO = new SortedDTO();
+        sortedDTO.setTime(after - before);
+        sortedDTO.setDestinations(businessArray);
+
+        return sortedDTO;
     }
 }
