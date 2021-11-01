@@ -65,8 +65,8 @@ public class BusinessController {
         return distanceUtil.distanceList(originLat, originLong, destinations, maxDist);
     }
 
-    @GetMapping(value = "/filter-sort")
-    public SortedDTO filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
+    @GetMapping(value = "/filter-sort/merge-sort")
+    public SortedDTO filterAndMergeSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
         // Consider changing to set
         List<Business> destinations = businessService.findAll();
