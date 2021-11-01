@@ -2,28 +2,19 @@ package com.cs201.barcrawl.util;
 
 import org.springframework.stereotype.Component;
 
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+
 @Component
 public class InsertionSortUtil<T extends Comparable<? super T>> {
-//    public static void main(String[] args)
-//    {
-//        // example using Strings
-//        String[]                     arrayOfStrings = {"Andree", "Leana", "Faviola", "Loyce", "Quincy", "Milo", "Jamila", "Toccara", "Nelda", "Blair", "Ernestine", "Chara", "Kareen", "Monty", "Rene", "Cami", "Winifred", "Tara", "Demetrice", "Azucena"};
-//        InsertionSort<String> stringSorter   = new InsertionSort<>();
-//        stringSorter.insertionSort(arrayOfStrings);
-//        System.out.println(java.util.Arrays.toString(arrayOfStrings));
-//
-//        // example using Doubles
-//        Double[]                     arrayOfDoubles = {0.35, 0.02, 0.36, 0.82, 0.27, 0.49, 0.41, 0.17, 0.30, 0.89, 0.37, 0.66, 0.82, 0.17, 0.20, 0.96, 0.18, 0.25, 0.37, 0.52};
-//        InsertionSort<Double> doubleSorter   = new InsertionSort<>();
-//        doubleSorter.insertionSort(arrayOfDoubles);
-//        System.out.println(java.util.Arrays.toString(arrayOfDoubles));
-//    }
 
-    public void insertionSort(T[] array)
-    {
+    public long[] insertionSort(T[] array) {
+        long usedMemoryBefore = getReallyUsedMemory();
+        long before = System.currentTimeMillis();
+        System.out.println(usedMemoryBefore);
+
         // start at the first index and iterate through to the end
-        for (int i = 1; i < array.length; i++)
-        {
+        for (int i = 1; i < array.length; i++) {
             int currentIndex = i;
             /*
              * Check:
@@ -40,5 +31,35 @@ public class InsertionSortUtil<T extends Comparable<? super T>> {
                 currentIndex--;
             }
         }
+
+        long after = System.currentTimeMillis();
+        long usedMemoryAfter = getReallyUsedMemory();
+        System.out.println(usedMemoryAfter);
+        long[] results = new long[2];
+        results[0] = after - before;
+        results[1] = usedMemoryAfter - usedMemoryBefore;
+        return results;
     }
+
+    private long getGcCount() {
+        long sum = 0;
+        for (GarbageCollectorMXBean b : ManagementFactory.getGarbageCollectorMXBeans()) {
+            long count = b.getCollectionCount();
+            if (count != -1) { sum += count; }
+        }
+        return sum;
+    }
+
+    private long getCurrentlyAllocatedMemory() {
+        final Runtime runtime = Runtime.getRuntime();
+        return (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+    }
+
+    private long getReallyUsedMemory() {
+        long before = getGcCount();
+        System.gc();
+        while (getGcCount() == before);
+        return getCurrentlyAllocatedMemory();
+    }
+
 }
