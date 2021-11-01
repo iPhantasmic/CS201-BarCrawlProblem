@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 // Taken from: https://big-o.io/examples/quicksort/java-generic/
 @Component
 public class QuickSortUtil<T extends Comparable<? super T>> {
-    void quicksort(T[] array, int startIndex, int endIndex)
+    public void quicksort(T[] array, int startIndex, int endIndex)
     {
         // verify that the start and end index have not overlapped
         if (startIndex < endIndex)
