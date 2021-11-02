@@ -12,7 +12,7 @@ import java.io.*;
 public class CS201Application {
 
     public static void main(String[] args) {
-        prepareBusinessJson();
+//        prepareBusinessJson();
         SpringApplication.run(CS201Application.class, args);
 
     }

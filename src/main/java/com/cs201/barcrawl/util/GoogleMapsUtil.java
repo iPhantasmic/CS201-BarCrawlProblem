@@ -45,8 +45,6 @@ public class GoogleMapsUtil {
                 int distance = distances.get(i).getAsJsonObject().get("distance").getAsJsonObject().get("value").getAsInt();
                 toReturn.add(distance);
             }
-            System.out.println("" + origin.getId() + destinations);
-            System.out.println("" + origin.getId() + toReturn);
             return toReturn;
         } catch (IOException e) {
             e.printStackTrace();

@@ -2,6 +2,7 @@ package com.cs201.barcrawl.controller;
 
 import com.cs201.barcrawl.models.Business;
 import com.cs201.barcrawl.service.BudgetService;
+import com.cs201.barcrawl.models.SortedDTO;
 import com.cs201.barcrawl.service.BusinessService;
 import com.cs201.barcrawl.service.SortingService;
 import com.cs201.barcrawl.util.DistanceUtil;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,9 +73,47 @@ public class BusinessController {
         return distanceUtil.distanceList(originLat, originLong, destinations, maxDist);
     }
 
-    @GetMapping(value = "/filter-sort")
-    public Business[] filterAndSort(@RequestParam Double originLat, @RequestParam Double originLong,
+    @GetMapping(value = "/filter-sort/merge-sort")
+    public SortedDTO filterAndMergeSort(@RequestParam Double originLat, @RequestParam Double originLong,
                                                  @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.mergeSort(destinations);
+
+        return result;
+    }
+
+    @GetMapping(value = "/filter-sort/insertion-sort")
+    public SortedDTO filterAndInsertionSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                        @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.insertionSort(destinations);
+
+        return result;
+    }
+
+    @GetMapping(value = "/filter-sort/quick-sort")
+    public SortedDTO filterAndQuickSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                            @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.quickSort(destinations);
+
+        return result;
+    }
+
+    @GetMapping(value = "/filter-sort/heap-sort")
+    public SortedDTO filterAndHeapSort(@RequestParam Double originLat, @RequestParam Double originLong,
+                                        @RequestParam Integer maxDist) { // maxDist is in metres
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+
+        SortedDTO result = sortingService.heapSort(destinations);
+
+        return result;
+    }
+
+    public List<Business> filter(Double originLat, Double originLong, Integer maxDist) {
         // Consider changing to set
         List<Business> destinations = businessService.findAll();
 
@@ -97,9 +137,7 @@ public class BusinessController {
             next.setDistance(distance);
         }
 
-        Business[] result = sortingService.mergeSort(destinations);
-
-        return result;
+        return destinations;
     }
 
     @PostMapping("/budget")
@@ -137,5 +175,11 @@ public class BusinessController {
         destinations.add(businessService.getBusiness(25));
         destinations.add(businessService.getBusiness(26));
         return routeBuilder.orderOfVisitation(destinations);
+    }
+    @GetMapping(value = "/route")
+    public List<Business> route(@RequestParam Double originLat, @RequestParam Double originLong,
+                                @RequestParam Integer maxDist){
+        List<Business> destinations = filter(originLat, originLong, maxDist);
+        return routeBuilder.orderOfVisitation(originLat, originLong, destinations);
     }
 }

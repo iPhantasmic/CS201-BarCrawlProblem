@@ -28,15 +28,33 @@ public class RouteBuilder {
         return businessGraph;
     }
 
-    public List<Business> orderOfVisitation(List<Business> businesses){
+    public List<Business> orderOfVisitation(double originLat, double originLong, List<Business> businesses){
         List<Business> toReturn = new ArrayList<Business>();
         BusinessGraph businessGraph = graphBuilder(businesses);
-        BusinessVertex start = businessGraph.getVertex(businesses.get(0));
+        BusinessVertex start = businessGraph.getVertex(nearestBusinessToOrigin(originLat, originLong, businesses));
         List<BusinessVertex> toVisit = businessGraph.nearestNeighbourTraversal(start);
         for(BusinessVertex v : toVisit){
             toReturn.add(v.getBusiness());
         }
         return toReturn;
+    }
+
+    public Business nearestBusinessToOrigin(double originLat, double originLong, List<Business> businesses){
+        // Wrap origin in Business model to make use of existing google maps functions
+        Business origin = new Business();
+        origin.setLatitude(originLat);
+        origin.setLongitude(originLong);
+
+        List<Integer> distanceFromOrigin = googleMapsUtil.distanceMatrix(origin, businesses);
+        Business nearest = null;
+        int nearest_distance = Integer.MAX_VALUE;
+        for(int i = 0; i < distanceFromOrigin.size(); i++){
+            if(distanceFromOrigin.get(i) < nearest_distance){
+                nearest_distance = distanceFromOrigin.get(i);
+                nearest = businesses.get(i);
+            }
+        }
+        return nearest;
     }
 
 }
