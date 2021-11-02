@@ -55,11 +55,15 @@ public class SortingService {
         Business[] businessArray = wrap(businesses);
 
         long before = System.currentTimeMillis();
-        quickSortUtil.quicksort(businessArray, 0, businessArray.length - 1);
+        quickSortUtil.quickSort(businessArray, 0, businessArray.length - 1);
         long after = System.currentTimeMillis();
+
+        ArrayList<Long> spaceUsed = new ArrayList<>();
+        quickSortUtil.quickSortSpace(businessArray, 0, businessArray.length - 1, spaceUsed);
 
         SortedDTO sortedDTO = new SortedDTO();
         sortedDTO.setTime(after - before);
+        sortedDTO.setSpace(spaceUsed.stream().filter(i -> i > 0).mapToLong(Long::longValue).sum());
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;
