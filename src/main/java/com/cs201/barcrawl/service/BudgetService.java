@@ -26,12 +26,13 @@ public class BudgetService {
                     double possibleNewStars = businessesAL.get(i-1).getStars()
                             + getValues(businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))]);
                     if (currentStars > possibleNewStars) {
-                        businesses[i][j] = businesses[i-1][j].clone();
+                        businesses[i][j] = businesses[i-1][j];
                     } else {
                         Business[] toAdd = businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))].clone();
                         int index = getEmptyIndex(toAdd);
                         toAdd[index] = businessesAL.get(i-1);
                         businesses[i][j] = toAdd;
+                        System.out.println(Arrays.toString(businesses[i][j]));
                     }
                 }
                 else {
@@ -54,7 +55,7 @@ public class BudgetService {
 
     private int getEmptyIndex(Business[] businesses) {
         for(int i = 0; i < businesses.length; i++) {
-            if (businesses[i] == null) { return i;}
+            if (businesses[i] == null || businesses[i].getStars() == 0) { return i;}
         }
         return businesses.length -1;
     }

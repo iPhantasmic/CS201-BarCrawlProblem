@@ -158,7 +158,7 @@ public class BusinessController {
                     finalResult.add(resultWithNull[i]);
                 }
             }
-            return finalResult.subList(1,finalResult.size()-1);
+            return finalResult;
         } catch (IllegalArgumentException e) {
             //No business met the budget
             return new ArrayList<Business>();
