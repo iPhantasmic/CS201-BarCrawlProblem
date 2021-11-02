@@ -9,6 +9,7 @@ import com.cs201.barcrawl.util.QuickSortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,12 +34,18 @@ public class SortingService {
     public SortedDTO mergeSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
+        // Calculate sort time
         long before = System.currentTimeMillis();
         mergeSortUtil.mergeSort(businessArray, 0, businessArray.length - 1);
         long after = System.currentTimeMillis();
 
+        // Calculate approx memory used
+        ArrayList<Long> spaceUsed = new ArrayList<>();
+        mergeSortUtil.mergeSortSpace(businessArray, 0, businessArray.length - 1, spaceUsed);
+
         SortedDTO sortedDTO = new SortedDTO();
         sortedDTO.setTime(after - before);
+        sortedDTO.setSpace(spaceUsed.stream().filter(i -> i > 0).mapToLong(Long::longValue).sum());
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;
@@ -61,12 +68,11 @@ public class SortingService {
     public SortedDTO insertionSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
-        long before = System.currentTimeMillis();
-        insertionSortUtil.insertionSort(businessArray);
-        long after = System.currentTimeMillis();
+        long[] results = insertionSortUtil.insertionSort(businessArray);
 
         SortedDTO sortedDTO = new SortedDTO();
-        sortedDTO.setTime(after - before);
+        sortedDTO.setTime(results[0]);
+        sortedDTO.setSpace(results[1]);
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;
@@ -75,12 +81,11 @@ public class SortingService {
     public SortedDTO heapSort(List<Business> businesses) {
         Business[] businessArray = wrap(businesses);
 
-        long before = System.currentTimeMillis();
-        heapSortUtil.heapSort(businessArray);
-        long after = System.currentTimeMillis();
+        long[] results = heapSortUtil.heapSort(businessArray);
 
         SortedDTO sortedDTO = new SortedDTO();
-        sortedDTO.setTime(after - before);
+        sortedDTO.setTime(results[0]);
+        sortedDTO.setSpace(results[1]);
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;
