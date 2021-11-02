@@ -1,12 +1,17 @@
 package com.cs201.barcrawl.controller;
 
 import com.cs201.barcrawl.models.Business;
+import com.cs201.barcrawl.service.BudgetService;
 import com.cs201.barcrawl.models.SortedDTO;
 import com.cs201.barcrawl.service.BusinessService;
 import com.cs201.barcrawl.service.SortingService;
 import com.cs201.barcrawl.util.DistanceUtil;
 import com.cs201.barcrawl.util.GoogleMapsUtil;
 import com.cs201.barcrawl.util.routing.RouteBuilder;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +41,9 @@ public class BusinessController {
 
     @Autowired
     SortingService sortingService;
+
+    @Autowired
+    BudgetService budgetService;
 
     @GetMapping(value = "/test")
     public @ResponseBody ResponseEntity<?> TestApi() {
@@ -130,6 +138,32 @@ public class BusinessController {
         }
 
         return destinations;
+    }
+
+    @PostMapping("/budget")
+    @ResponseBody
+    public List<Business> budgetController(@RequestBody JsonObject body) {
+        JsonArray businessesJA = body.getAsJsonArray("businesses");
+        ArrayList<Business> businessesAL = new ArrayList<>();
+        for(int i = 0; i < businessesJA.size(); i++) {
+            String id = businessesJA.get(i).getAsString();
+            businessesAL.add(businessService.getBusinessByYelpId(id));
+        }
+        Business[] resultWithNull = budgetService.getOptimizedBudget(businessesAL,
+                (int) body.get("budget").getAsDouble());
+        try {
+            ArrayList<Business> finalResult = new ArrayList<>();
+            for (int i = 0; i < resultWithNull.length; i++){
+                if (resultWithNull[i] != null) {
+                    finalResult.add(resultWithNull[i]);
+                }
+            }
+            return finalResult;
+        } catch (IllegalArgumentException e) {
+            //No business met the budget
+            return new ArrayList<Business>();
+        }
+
     }
 
     @GetMapping(value = "/route")
