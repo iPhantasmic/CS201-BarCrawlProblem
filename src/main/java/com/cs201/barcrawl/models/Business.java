@@ -2,22 +2,25 @@ package com.cs201.barcrawl.models;
 
 import com.cs201.barcrawl.util.JsonNodeConverter;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.persistence.*;
 
 @Entity
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Business implements Comparable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String business_id;
+    private String businessId;
     private String name;
     private String address;
     private String city;
     private String state;
-    private String postal_code;
+    private String postalCode;
 
     @Column(precision = 10, scale = 8)
     private double latitude;
@@ -26,7 +29,7 @@ public class Business implements Comparable {
 
     private double stars;
     private int review_count;
-    private int is_open;
+    private int isOpen;
     private int distance;
 
     @Convert(converter = JsonNodeConverter.class)
@@ -50,11 +53,11 @@ public class Business implements Comparable {
     }
 
     public String getBusiness_id() {
-        return business_id;
+        return businessId;
     }
 
     public void setBusiness_id(String business_id) {
-        this.business_id = business_id;
+        this.businessId = business_id;
     }
 
     public String getName() {
@@ -90,11 +93,11 @@ public class Business implements Comparable {
     }
 
     public String getPostal_code() {
-        return postal_code;
+        return postalCode;
     }
 
     public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
+        this.postalCode = postal_code;
     }
 
     public double getLatitude() {
@@ -130,11 +133,11 @@ public class Business implements Comparable {
     }
 
     public int getIs_open() {
-        return is_open;
+        return isOpen;
     }
 
     public void setIs_open(int is_open) {
-        this.is_open = is_open;
+        this.isOpen = is_open;
     }
 
     public JsonNode getAttributes() {

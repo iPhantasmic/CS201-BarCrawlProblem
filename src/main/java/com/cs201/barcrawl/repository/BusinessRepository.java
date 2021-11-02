@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface BusinessRepository extends CrudRepository<Business, Long> {
     List<Business> findAllByOrderByNameAsc();
-    Business findBusinessByBusiness_id(String id);
+    Business findBusinessByBusinessId(String id);
     // Nothing to see here~
 }

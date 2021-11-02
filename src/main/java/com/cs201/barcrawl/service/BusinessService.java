@@ -49,7 +49,7 @@ public class BusinessService {
     }
 
     public Business getBusinessByYelpId(String id) {
-        return businessRepository.findBusinessByBusiness_id(id);
+        return businessRepository.findBusinessByBusinessId(id);
     }
 
     // TODO: sorting algorithms here

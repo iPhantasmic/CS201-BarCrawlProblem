@@ -166,16 +166,6 @@ public class BusinessController {
 
     }
 
-    @GetMapping(value = "/routeTest")
-    public List<Business> routing(){
-        List<Business> destinations = new ArrayList<>();
-        destinations.add(businessService.getBusiness(5));
-        destinations.add(businessService.getBusiness(11));
-        destinations.add(businessService.getBusiness(16));
-        destinations.add(businessService.getBusiness(25));
-        destinations.add(businessService.getBusiness(26));
-        return routeBuilder.orderOfVisitation(destinations);
-    }
     @GetMapping(value = "/route")
     public List<Business> route(@RequestParam Double originLat, @RequestParam Double originLong,
                                 @RequestParam Integer maxDist){
