@@ -1,71 +1,83 @@
 package com.cs201.barcrawl.service;
 
 import com.cs201.barcrawl.models.Business;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 @Service
 public class BudgetService {
-    public ArrayList<Business> getRestaurantsUnderBudget(ArrayList<Business> businessAL, double budget) {
-        ArrayList<ArrayList<ArrayList<Business>>> table = new ArrayList<>();
-
-        long budgetLong = (long) (budget * 100);
-
-        for(int i = 0; i <= businessAL.size(); i++) {
-            for(int j = 0; j <= budgetLong; j++) {
+    public Business[] getOptimizedBudget(ArrayList<Business> businessesAL, int budget) {
+        Business[][][] businesses = new Business[businessesAL.size()+1][budget+1][businessesAL.size()+1];
+        for(int i = 0; i <= businessesAL.size(); i++) {
+            for (int j = 0; j <= budget; j++) {
                 if (i == 0 || j == 0) {
-                    ArrayList<Business> dummyBusinessAL = new ArrayList<Business>();
+                    Business[] dummyBusinesses = new Business[businessesAL.size()];
                     Business dummyBusiness = new Business();
                     dummyBusiness.setStars(0);
-                    dummyBusiness.setPrice(0);
-                    dummyBusinessAL.add(dummyBusiness);
-                    ArrayList<ArrayList<Business>> dummyVal = new ArrayList<>();
-                    dummyVal.add(dummyBusinessAL);
-                    table.add(dummyVal);
+                    dummyBusinesses[0] = dummyBusiness;
+                    businesses[i][j] = dummyBusinesses;
                 }
-                else if (businessAL.get(i - 1).getPrice() <= budgetLong) {
-                    double prevStarVal = getTotalStarsCurrentBasket(table.get(i-1).get(j));
-                    double addNewBusiness = businessAL.get(i-1).getStars()
-                            + getTotalStarsCurrentBasket(table.get(i-1)
-                            .get((int) (j - businessAL.get(i-1).getPrice())));
-                    ArrayList<Business> newBusinessesAL = null;
-                    if (prevStarVal > addNewBusiness) {
-                        newBusinessesAL = table.get(i-1).get(j);
+                else if (getPriceBasedOnAttribute(businessesAL.get(i-1)) <= j) {
+                    double currentStars = getValues(businesses[i-1][j]);
+                    double possibleNewStars = businessesAL.get(i-1).getStars()
+                            + getValues(businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))]);
+                    if (currentStars > possibleNewStars) {
+                        businesses[i][j] = businesses[i-1][j].clone();
                     } else {
-                        newBusinessesAL = table.get(i-1)
-                                .get((int) (j - businessAL.get(i-1).getPrice()));
-                        newBusinessesAL.add(businessAL.get(i-1));
+                        Business[] toAdd = businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))].clone();
+                        int index = getEmptyIndex(toAdd);
+                        toAdd[index] = businessesAL.get(i-1);
+                        businesses[i][j] = toAdd;
                     }
-                    ArrayList<ArrayList<Business>> valToAdd = new ArrayList<>();
-                    valToAdd.add(newBusinessesAL);
-                    table.add(valToAdd);
                 }
                 else {
-                    ArrayList<Business> newBusinessesAL = table.get(i-1).get(j);
-                    ArrayList<ArrayList<Business>> valToAdd = new ArrayList<>();
-                    valToAdd.add(newBusinessesAL);
-                    table.add(valToAdd);
+                    businesses[i][j] = businesses[i-1][j].clone();
                 }
             }
         }
-
-        return table.get(businessAL.size()).get((int) budgetLong);
+        return businesses[businessesAL.size()][budget];
     }
 
-    private double getTotalPriceCurrentBasket(ArrayList<Business> businessesAL) {
-        double total = 0;
-        for(int i = 0; i < businessesAL.size(); i++) {
-            total += businessesAL.get(i).getPrice();
+    private double  getValues(Business[] businesses) {
+        double res = 0;
+        for (int i =0; i < businesses.length; i++) {
+            if (businesses[i] != null) {
+                res += businesses[i].getStars();
+            }
         }
-        return total;
+        return res;
     }
 
-    private double getTotalStarsCurrentBasket(ArrayList<Business> businessesAL) {
-        double total = 0;
-        for(int i = 0; i < businessesAL.size(); i++) {
-            total += businessesAL.get(i).getStars();
+    private int getEmptyIndex(Business[] businesses) {
+        for(int i = 0; i < businesses.length; i++) {
+            if (businesses[i] == null) { return i;}
         }
-        return total;
+        return businesses.length -1;
+    }
+
+    private int getPriceBasedOnAttribute(Business business) {
+        if (business.getStars() == 0.0) {
+            return 0;
+        }
+        if (business.getAttributes().get("RestaurantsPriceRange2") == null) {
+            return 20;
+        }
+        int range = business.getAttributes()
+                .get("RestaurantsPriceRange2").asInt();
+        switch (range){
+            case 4:
+                return 80;
+            case 3:
+                return 45;
+            case 1:
+                return 10;
+            case 2:
+            default:
+                return 20;
+        }
     }
 }

@@ -48,6 +48,10 @@ public class BusinessService {
                                     .orElseThrow(()-> new IllegalArgumentException("Business does not exist"));
     }
 
+    public Business getBusinessByYelpId(String id) {
+        return businessRepository.findBusinessByBusiness_id(id);
+    }
+
     // TODO: sorting algorithms here
     // start measuring time taken only after receiving the object from businessRepository query
 

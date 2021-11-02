@@ -27,7 +27,6 @@ public class Business implements Comparable {
     private double stars;
     private int review_count;
     private int is_open;
-    private double price;
     private int distance;
 
     @Convert(converter = JsonNodeConverter.class)
@@ -161,10 +160,6 @@ public class Business implements Comparable {
     public void setHours(JsonNode hours) {
         this.hours = hours;
     }
-
-    public double getPrice() { return  price; }
-
-    public void setPrice(double price) { this.price = price; }
 
     public void setDistance(int distance) {
         this.distance = distance;
