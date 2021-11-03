@@ -18,10 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -140,36 +137,45 @@ public class BusinessController {
         return destinations;
     }
 
-    @PostMapping("/budget")
-    @ResponseBody
-    public List<Business> budgetController(@RequestBody JsonObject body) {
-        JsonArray businessesJA = body.getAsJsonArray("businesses");
-        ArrayList<Business> businessesAL = new ArrayList<>();
-        for(int i = 0; i < businessesJA.size(); i++) {
-            String id = businessesJA.get(i).getAsString();
-            businessesAL.add(businessService.getBusinessByYelpId(id));
-        }
-        Business[] resultWithNull = budgetService.getOptimizedBudget(businessesAL,
-                (int) body.get("budget").getAsDouble());
-        try {
-            ArrayList<Business> finalResult = new ArrayList<>();
-            for (int i = 0; i < resultWithNull.length; i++){
-                if (resultWithNull[i] != null) {
-                    finalResult.add(resultWithNull[i]);
-                }
-            }
-            return finalResult;
-        } catch (IllegalArgumentException e) {
-            //No business met the budget
-            return new ArrayList<Business>();
-        }
+    @GetMapping(value = "/filter-sort/budget")
+    public List<Business> filterAndBudget(@RequestParam Double originLat, @RequestParam Double originLong,
+                                       @RequestParam Integer maxDist, @RequestParam Integer budget) { // maxDist is in metres
+        ArrayList<Business> destinations = (ArrayList<Business>) filter(originLat, originLong, maxDist);
+
+        return budgetService.getOptimizedBudget(destinations, budget);
 
     }
 
-    @GetMapping(value = "/route")
-    public List<Business> route(@RequestParam Double originLat, @RequestParam Double originLong,
-                                @RequestParam Integer maxDist){
+    @GetMapping(value = "/filter-sort/budget/route")
+    public List<Business> filterAndBudgetAndRoute(@RequestParam Double originLat, @RequestParam Double originLong,
+                                          @RequestParam Integer maxDist, @RequestParam Integer budget) { // maxDist is in metres
         List<Business> destinations = filter(originLat, originLong, maxDist);
-        return routeBuilder.orderOfVisitation(originLat, originLong, destinations);
+
+        List<Business> toVisit = budgetService.getOptimizedBudget(destinations, budget);
+
+        List<Business> orderOfVisitation = routeBuilder.orderOfVisitation(originLat, originLong, toVisit);
+
+        return orderOfVisitation;
+
     }
+
+//    @PostMapping("/budget")
+//    @ResponseBody
+//    public List<Business> budgetController(@RequestBody JsonObject body) {
+//        JsonArray businessesJA = body.getAsJsonArray("businesses");
+//        ArrayList<Business> businessesAL = new ArrayList<>();
+//        for(int i = 0; i < businessesJA.size(); i++) {
+//            String id = businessesJA.get(i).getAsString();
+//            businessesAL.add(businessService.getBusinessByYelpId(id));
+//        }
+//        return budgetService.getOptimizedBudget(businessesAL,
+//                (int) body.get("budget").getAsDouble());
+//    }
+
+//    @GetMapping(value = "/route")
+//    public List<Business> route(@RequestParam Double originLat, @RequestParam Double originLong,
+//                                @RequestParam Integer maxDist){
+//        List<Business> destinations = filter(originLat, originLong, maxDist);
+//        return routeBuilder.orderOfVisitation(originLat, originLong, destinations);
+//    }
 }

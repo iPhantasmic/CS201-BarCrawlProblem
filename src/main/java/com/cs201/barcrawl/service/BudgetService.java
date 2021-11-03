@@ -7,57 +7,44 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class BudgetService {
-    public Business[] getOptimizedBudget(ArrayList<Business> businessesAL, int budget) {
-        Business[][][] businesses = new Business[businessesAL.size()+1][budget+1][businessesAL.size()+1];
+    public ArrayList<Business> getOptimizedBudget(List<Business> businessesAL, int budget) {
+        ArrayList<Business>[][] businesses = new ArrayList[businessesAL.size()+1][budget+1];
         for(int i = 0; i <= businessesAL.size(); i++) {
             for (int j = 0; j <= budget; j++) {
                 if (i == 0 || j == 0) {
-                    Business[] dummyBusinesses = new Business[businessesAL.size()];
-                    Business dummyBusiness = new Business();
-                    dummyBusiness.setStars(0);
-                    dummyBusinesses[0] = dummyBusiness;
-                    businesses[i][j] = dummyBusinesses;
-                }
-                else if (getPriceBasedOnAttribute(businessesAL.get(i-1)) <= j) {
-                    double currentStars = getValues(businesses[i-1][j]);
-                    double possibleNewStars = businessesAL.get(i-1).getStars()
-                            + getValues(businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))]);
+                    businesses[i][j] = new ArrayList<Business>();
+                } else if (getPriceBasedOnAttribute(businessesAL.get(i - 1)) <= j) {
+                    double currentStars = getValues(businesses[i - 1][j]);
+                    double possibleNewStars = businessesAL.get(i - 1).getStars()
+                            + getValues(businesses[i - 1][j - getPriceBasedOnAttribute(businessesAL.get(i - 1))]);
                     if (currentStars > possibleNewStars) {
-                        businesses[i][j] = businesses[i-1][j];
+                        // If visiting this business does not increase stars, don't add this business to the list
+                        businesses[i][j] = businesses[i - 1][j];
                     } else {
-                        Business[] toAdd = businesses[i-1][j - getPriceBasedOnAttribute(businessesAL.get(i-1))].clone();
-                        int index = getEmptyIndex(toAdd);
-                        toAdd[index] = businessesAL.get(i-1);
-                        businesses[i][j] = toAdd;
-                        System.out.println(Arrays.toString(businesses[i][j]));
+                        // If visiting this business does increase stars, add it to the list
+                        ArrayList<Business> temp = new ArrayList<Business>(businesses[i - 1][j - getPriceBasedOnAttribute(businessesAL.get(i - 1))]);
+                        temp.add(businessesAL.get(i - 1));
+                        businesses[i][j] = temp;
+
                     }
-                }
-                else {
-                    businesses[i][j] = businesses[i-1][j].clone();
+                } else {
+                    businesses[i][j] = businesses[i][j - 1];
                 }
             }
         }
         return businesses[businessesAL.size()][budget];
     }
 
-    private double  getValues(Business[] businesses) {
+    private double  getValues(List<Business> businesses) {
         double res = 0;
-        for (int i =0; i < businesses.length; i++) {
-            if (businesses[i] != null) {
-                res += businesses[i].getStars();
-            }
+        for (Business b: businesses) {
+            res += b.getStars();
         }
         return res;
-    }
-
-    private int getEmptyIndex(Business[] businesses) {
-        for(int i = 0; i < businesses.length; i++) {
-            if (businesses[i] == null || businesses[i].getStars() == 0) { return i;}
-        }
-        return businesses.length -1;
     }
 
     private int getPriceBasedOnAttribute(Business business) {
