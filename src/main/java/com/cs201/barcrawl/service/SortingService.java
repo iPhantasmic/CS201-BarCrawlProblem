@@ -45,7 +45,8 @@ public class SortingService {
 
         SortedDTO sortedDTO = new SortedDTO();
         sortedDTO.setTime(after - before);
-        sortedDTO.setSpace(spaceUsed.stream().filter(i -> i > 0).mapToLong(Long::longValue).sum());
+        sortedDTO.setSpace(spaceUsed.stream().mapToLong(Long::longValue).sum());
+//        .filter(i -> i > 0)
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;
@@ -63,7 +64,8 @@ public class SortingService {
 
         SortedDTO sortedDTO = new SortedDTO();
         sortedDTO.setTime(after - before);
-        sortedDTO.setSpace(spaceUsed.stream().filter(i -> i > 0).mapToLong(Long::longValue).sum());
+        sortedDTO.setSpace(spaceUsed.stream().mapToLong(Long::longValue).sum());
+//        .filter(i -> i > 0)
         sortedDTO.setDestinations(businessArray);
 
         return sortedDTO;

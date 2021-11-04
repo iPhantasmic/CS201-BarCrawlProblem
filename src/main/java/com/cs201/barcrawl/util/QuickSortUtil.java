@@ -61,7 +61,7 @@ public class QuickSortUtil<T extends Comparable<? super T>> {
 
     private int partitionSpace(T[] array, int startIndex, int endIndex, ArrayList<Long> space) {
         long usedMemoryBefore = getReallyUsedMemory();
-        System.out.println(usedMemoryBefore);
+//        System.out.println(usedMemoryBefore);
 
         int pivotIndex = (startIndex + endIndex) / 2;
         T pivotValue = array[pivotIndex];
@@ -79,7 +79,7 @@ public class QuickSortUtil<T extends Comparable<? super T>> {
 
             if (startIndex >= endIndex) {
                 long usedMemoryAfter = getReallyUsedMemory();
-                System.out.println(usedMemoryAfter);
+//                System.out.println(usedMemoryAfter);
                 space.add(usedMemoryAfter - usedMemoryBefore);
                 return endIndex;
             }

@@ -11,7 +11,7 @@ public class InsertionSortUtil<T extends Comparable<? super T>> {
     public long[] insertionSort(T[] array) {
         long usedMemoryBefore = getReallyUsedMemory();
         long before = System.currentTimeMillis();
-        System.out.println(usedMemoryBefore);
+//        System.out.println(usedMemoryBefore);
 
         // start at the first index and iterate through to the end
         for (int i = 1; i < array.length; i++) {
@@ -34,7 +34,7 @@ public class InsertionSortUtil<T extends Comparable<? super T>> {
 
         long after = System.currentTimeMillis();
         long usedMemoryAfter = getReallyUsedMemory();
-        System.out.println(usedMemoryAfter);
+//        System.out.println(usedMemoryAfter);
         long[] results = new long[2];
         results[0] = after - before;
         results[1] = usedMemoryAfter - usedMemoryBefore;

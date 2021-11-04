@@ -85,7 +85,7 @@ public class MergeSortUtil<T extends Comparable<? super T>> {
 
     long mergeSpace(T[] array, int start, int middle, int end) {
         long usedMemoryBefore = getReallyUsedMemory();
-        System.out.println(usedMemoryBefore);
+//        System.out.println(usedMemoryBefore);
 
         T[] leftArray  = (T[]) new Comparable[middle - start + 1];
         T[] rightArray = (T[]) new Comparable[end - middle];
@@ -127,7 +127,7 @@ public class MergeSortUtil<T extends Comparable<? super T>> {
         while (rightIndex < rightArray.length) array[currentIndex++] = rightArray[rightIndex++];
 
         long usedMemoryAfter = getReallyUsedMemory();
-        System.out.println(usedMemoryAfter);
+//        System.out.println(usedMemoryAfter);
         return usedMemoryAfter - usedMemoryBefore;
     }
 
